@@ -3,6 +3,6 @@ import github from '@astrojs/github';
 
 export default defineConfig({
   site: 'https://thomastsao0704.github.io',
-  base: '/BLOG/',
+  base: '/BLOG',
   adapter: github(),
 });
