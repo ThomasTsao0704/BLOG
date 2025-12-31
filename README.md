@@ -1,134 +1,136 @@
-# 個人知識整合平台
-
 這是一個以 Astro + Markdown 為核心的知識庫與內容管理網站。
 
 # BLOG
 =======
 # 📚 個人知識整合平台
+=======
+﻿# 個人知識整合平台
 
-一個基於 Astro 建立的靜態部落格，整合股票分析、心理學文章與技術筆記。
+這是一套以 Astro 建置的個人知識庫，聚焦於三大主題：股票分析、心理學洞察、技術文章。內容以 Markdown 驅動，結構清楚、可長期累積。
 
-## ✨ 特色
-
-- 📈 **股票分析** - 個股深度分析、財務數據與投資策略
-- 🧠 **心理學洞察** - 心理學文章、人性探索與自我成長
-- 💻 **技術分享** - 程式開發經驗與技術學習筆記
-- 🎨 **優雅設計** - 簡潔美觀的介面設計
-- 🏷️ **標籤系統** - 便於分類與搜尋
-- 📱 **響應式** - 完美適配各種裝置
-
-## 🚀 快速開始
-
-### 本地開發
+## 快速開始
 
 ```bash
-# 安裝依賴
 npm install
-
-# 啟動開發伺服器
 npm run dev
-
-# 訪問 http://localhost:4321
 ```
 
-### 建置專案
+開啟 `http://localhost:4321` 檢視網站。
 
-```bash
-# 建置靜態網站
-npm run build
-
-# 預覽建置結果
-npm run preview
-```
-
-## 📂 專案結構
+## 專案結構（重點）
 
 ```
 BLOG/
-├── src/
-│   ├── content/          # 內容集合
-│   │   ├── stocks/       # 股票分析文章
-│   │   ├── psychology/   # 心理學文章
-│   │   └── tech/         # 技術文章
-│   ├── layouts/          # 版面配置
-│   ├── components/       # 可重用組件
-│   └── pages/            # 頁面路由
-│       ├── stocks/       # 股票頁面
-│       ├── psychology/   # 心理頁面
-│       └── tech/         # 技術頁面
-├── public/               # 靜態資源
-└── astro.config.mjs      # Astro 配置
+├─ src/
+│  ├─ content/              # 內容集合（Markdown）
+│  │  ├─ stocks/            # 股票分析
+│  │  ├─ psychology/        # 心理文章
+│  │  └─ tech/              # 技術文章
+│  ├─ pages/                # 路由
+│  │  ├─ stocks/
+│  │  ├─ psychology/
+│  │  └─ tech/
+│  ├─ layouts/              # 共用版型
+│  └─ components/           # 共用元件
+└─ src/content/config.ts    # 內容結構定義
 ```
 
-## 📝 撰寫文章
+## Collections 命名與規範
 
-### 股票分析
+以下結構以 `src/content/config.ts` 為準。
 
-在 `src/content/stocks/` 建立 Markdown 檔案：
+### 1/ `stocks`
+- 位置：`src/content/stocks/`
+- 用途：個股分析、投資筆記、市場觀察
+- Frontmatter 欄位：
 
-\`\`\`markdown
+```yaml
 ---
 title: 台積電
-stockCode: 2330.TW
+stockCode: 2330.TW          # 選填
 category: 半導體
-tags: [晶圓代工, AI晶片]
-price: 850
-pe: 28.5
-dividend: 2.8
-rating: 持有
-targetPrice: 900
-analysisDate: 2025-12-31
+tags: [AI, 先進製程]         # 選填
+price: 850                  # 選填
+marketCap: 22000000         # 選填
+pe: 28.5                    # 選填
+dividend: 2.8               # 選填
+sector: 半導體製造           # 選填
+rating: 買入                # 選填：買入/持有/賣出/觀察
+targetPrice: 900            # 選填
+analysisDate: 2025-12-31    # 選填（日期）
 ---
+```
 
-## 投資亮點
+### 2/ `psychology`
+- 位置：`src/content/psychology/`
+- 用途：心理學文章、人性洞察、長文論述
+- Frontmatter 欄位：
 
-內容...
-\`\`\`
-
-### 心理學文章
-
-在 `src/content/psychology/` 建立 Markdown 檔案：
-
-\`\`\`markdown
+```yaml
 ---
-title: 文章標題
-description: 文章描述
-date: 2025-12-31
-tags: [心理學, 成長]
-draft: false
+title: 為什麼正面思考不夠
+description: 關於耗竭、責任感與樂觀的界線
+date: 2025-01-01
+tags: [心理, 社會]          # 選填
+draft: false                # 選填，預設 false
 ---
+```
 
-文章內容...
-\`\`\`
+### 3/ `tech`
+- 位置：`src/content/tech/`
+- 用途：技術文章、開發筆記、系列整理
+- Frontmatter 欄位：
 
-### 技術文章
-
-在 `src/content/tech/` 建立 Markdown 檔案：
-
-\`\`\`markdown
+```yaml
 ---
-title: 技術文章標題
+title: Astro 內容集合實作
 order: 1
-tags: [JavaScript, Astro]
+tags: [Astro, Content]      # 選填
 ---
+```
 
-文章內容...
-\`\`\`
+## URL 結構
 
-## 🌐 部署到 GitHub Pages
+- 首頁：`/`
+- 列表頁：
+  - `/stocks`
+  - `/psychology`
+  - `/tech`
+- 內容頁：
+  - `/stocks/<slug>`
+  - `/psychology/<slug>`
+  - `/tech/<slug>`
 
-### 1. 更新配置
+## Slug 策略
 
-編輯 `astro.config.mjs`，將 `YOUR-USERNAME` 替換為您的 GitHub 用戶名：
+- Slug 來自檔名（或資料夾路徑），由 Astro Content Collections 自動產生。
+- 範例：
+  - `src/content/stocks/tsmc-2330.md` → `/stocks/tsmc-2330/`
+- `stocks` 使用 catch-all 路由（`[...slug].astro`），可以支援巢狀路徑：
+  - `src/content/stocks/semis/tsmc-2330.md` → `/stocks/semis/tsmc-2330/`
+- `psychology`、`tech` 使用單層 slug（`[slug].astro`），建議不要再分子資料夾。
 
-\`\`\`javascript
-export default defineConfig({
-  site: 'https://YOUR-USERNAME.github.io',
-  base: '/BLOG',
-});
-\`\`\`
+## 系統規範與行為規則
 
-### 2. 建立 GitHub Repository
+- `psychology`：`draft: true` 的內容不會出現在列表頁，也不會產生內容頁。
+- 排序規則：
+  - `stocks`：標題排序（`zh-TW`）
+  - `psychology`：日期新到舊
+  - `tech`：`order` 小到大
+- 首頁顯示各集合「最新三筆」（依上述排序邏輯）。
+- 標籤：
+  - `tags` 只有在有值時顯示。
+  - 首頁「熱門標籤」取三個集合合併後的前 8 名。
+- 目錄（TOC）：
+  - 心理與技術內容頁啟用。
+  - 只有在標題數量 >= 3 且深度 <= 3 時顯示。
+- 日期格式：
+  - `date` / `analysisDate` 建議使用 `YYYY-MM-DD`。
+- 評級限制：
+  - `rating` 僅接受「買入／持有／賣出／觀察」。
+- 搜尋：
+  - `SearchBox` 目前為 UI 佔位，尚未接上搜尋引擎（可再接 Pagefind）。
+
 
 \`\`\`bash
 git init
@@ -164,4 +166,12 @@ MIT License
 ## 🙏 致謝
 
 感謝所有開源專案的貢獻者！
+
+=======
+## 開發建議
+
+- 內容維護只需編輯 `src/content/**`。
+- 如果要新增主題集合，需同步更新：
+  - `src/content/config.ts`
+  - `src/pages/` 對應列表與內容頁
 
