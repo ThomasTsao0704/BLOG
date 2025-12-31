@@ -1,0 +1,29 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TagList from "../../components/TagList.astro";
+import { getCollection } from "astro:content";
+
+const techArticles = await getCollection("tech");
+const sortedTech = techArticles.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="技術" description="技術文章系列與開發筆記。">
+  <section class="list-page">
+    <header class="list-hero">
+      <p class="eyebrow">技術</p>
+      <h1>程式開發與技術探索。</h1>
+      <p class="lead">
+        技術文章系列、開發經驗與程式設計的知識累積。
+      </p>
+    </header>
+    <div class="list-grid">
+      {sortedTech.map((entry) => (
+        <article class="card">
+          <p class="meta">第 {String(entry.data.order).padStart(2, "0")} 篇</p>
+          <h3><a href={`/tech/${entry.slug}`}>{entry.data.title}</a></h3>
+          <TagList tags={entry.data.tags ?? []} />
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

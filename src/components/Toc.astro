@@ -1,0 +1,18 @@
+﻿---
+const { headings = [] } = Astro.props;
+const filtered = headings.filter((heading) => heading.depth <= 3);
+const shouldRender = filtered.length >= 3;
+---
+
+{shouldRender && (
+  <nav class="toc" aria-label="目錄">
+    <div class="toc-title">本頁目錄</div>
+    <ol>
+      {filtered.map((heading) => (
+        <li class={`depth-${heading.depth}`}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

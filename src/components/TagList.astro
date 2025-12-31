@@ -1,0 +1,12 @@
+﻿---
+const { tags = [] } = Astro.props;
+const list = Array.isArray(tags) ? tags.filter(Boolean) : [];
+---
+
+{list.length > 0 && (
+  <ul class="tag-list" aria-label="標籤">
+    {list.map((tag) => (
+      <li><span>#{tag}</span></li>
+    ))}
+  </ul>
+)}

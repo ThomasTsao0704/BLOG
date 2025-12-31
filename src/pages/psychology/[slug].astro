@@ -1,0 +1,48 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TagList from "../../components/TagList.astro";
+import Toc from "../../components/Toc.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("psychology", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+type Props = {
+  post: CollectionEntry<"psychology">;
+};
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <div class="content-grid">
+    <article class="content">
+      <header class="content-header">
+        <p class="eyebrow">心理</p>
+        <h1>{post.data.title}</h1>
+        <p class="lead">{post.data.description}</p>
+        <p class="meta">
+          {post.data.date.toLocaleDateString("zh-TW", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </p>
+        <TagList tags={post.data.tags ?? []} />
+      </header>
+      <div class="content-body">
+        <Content />
+      </div>
+    </article>
+    <aside class="content-aside">
+      <Toc headings={headings} />
+    </aside>
+  </div>
+</BaseLayout>

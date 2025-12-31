@@ -1,0 +1,16 @@
+﻿---
+const { placeholder = "搜尋筆記、文章、系列" } = Astro.props;
+---
+
+<form class="search-box" role="search">
+  <label class="visually-hidden" for="site-search">搜尋</label>
+  <input
+    id="site-search"
+    type="search"
+    name="q"
+    placeholder={placeholder}
+    autocomplete="off"
+  />
+  <button type="button" aria-disabled="true">搜尋</button>
+  <p class="search-hint">準備好時可接上 Pagefind。</p>
+</form>

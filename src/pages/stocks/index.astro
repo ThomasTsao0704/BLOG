@@ -1,0 +1,217 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TagList from "../../components/TagList.astro";
+import { getCollection } from "astro:content";
+
+// 獲取並排序股票資料
+const stocks = await getCollection("stocks");
+const sortedStocks = stocks.sort((a, b) =>
+  a.data.title.localeCompare(b.data.title, 'zh-TW')
+);
+
+const pageTitle = "股票分析";
+const pageDescription = "個股分析、投資筆記與市場觀察";
+
+// 評級顏色對應
+const ratingColors = {
+  '買入': '#10b981',
+  '持有': '#3b82f6',
+  '賣出': '#ef4444',
+  '觀察': '#f59e0b'
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <section class="list-page" aria-labelledby="stocks-heading">
+    <header class="list-hero">
+      <p class="eyebrow">股票分析</p>
+      <h1 id="stocks-heading">個股追蹤與投資筆記</h1>
+      <p class="lead">
+        記錄個股分析、投資想法與市場觀察，建立屬於自己的投資知識庫。
+      </p>
+    </header>
+
+    {sortedStocks.length === 0 ? (
+      <p class="empty-state">目前還沒有股票分析，敬請期待！</p>
+    ) : (
+      <div class="stock-grid" role="list">
+        {sortedStocks.map((stock) => (
+          <article class="stock-card" role="listitem">
+            <div class="stock-header">
+              <div class="stock-title-section">
+                <h3>
+                  <a href={`/stocks/${stock.slug}`} aria-label={`查看${stock.data.title}分析`}>
+                    {stock.data.title}
+                  </a>
+                </h3>
+                {stock.data.stockCode && (
+                  <span class="stock-code">{stock.data.stockCode}</span>
+                )}
+              </div>
+              {stock.data.rating && (
+                <span
+                  class="rating-badge"
+                  style={`background-color: ${ratingColors[stock.data.rating]}`}
+                  aria-label={`評級：${stock.data.rating}`}
+                >
+                  {stock.data.rating}
+                </span>
+              )}
+            </div>
+
+            <div class="stock-info">
+              {stock.data.price && (
+                <div class="info-item">
+                  <span class="label">股價</span>
+                  <span class="value">${stock.data.price}</span>
+                </div>
+              )}
+              {stock.data.pe && (
+                <div class="info-item">
+                  <span class="label">本益比</span>
+                  <span class="value">{stock.data.pe}</span>
+                </div>
+              )}
+              {stock.data.dividend && (
+                <div class="info-item">
+                  <span class="label">股息</span>
+                  <span class="value">{stock.data.dividend}%</span>
+                </div>
+              )}
+              {stock.data.targetPrice && (
+                <div class="info-item">
+                  <span class="label">目標價</span>
+                  <span class="value">${stock.data.targetPrice}</span>
+                </div>
+              )}
+            </div>
+
+            {stock.data.category && (
+              <p class="meta" aria-label="產業">{stock.data.category}</p>
+            )}
+
+            <TagList tags={stock.data.tags ?? []} />
+
+            {stock.data.analysisDate && (
+              <p class="analysis-date">
+                分析日期：{stock.data.analysisDate.toLocaleDateString('zh-TW')}
+              </p>
+            )}
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .stock-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .stock-card {
+    background: var(--color-bg-secondary, #fff);
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: all 0.2s;
+  }
+
+  .stock-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .stock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .stock-title-section {
+    flex: 1;
+  }
+
+  .stock-card h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.25rem;
+  }
+
+  .stock-card h3 a {
+    color: var(--color-text, #111827);
+    text-decoration: none;
+  }
+
+  .stock-card h3 a:hover {
+    color: #3b82f6;
+  }
+
+  .stock-code {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+
+  .rating-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .stock-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--color-bg, #f9fafb);
+    border-radius: 0.375rem;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-item .label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .info-item .value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text, #111827);
+  }
+
+  .meta {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+  }
+
+  .analysis-date {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: #6b7280;
+    padding: 3rem;
+    font-size: 1.125rem;
+  }
+</style>
