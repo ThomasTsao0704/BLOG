@@ -22,7 +22,7 @@ const sortedTech = techArticles.sort((a, b) => a.data.order - b.data.order);
       {sortedTech.map((entry) => (
         <article class="card">
           <p class="meta">第 {String(entry.data.order).padStart(2, "0")} 篇</p>
-          <h3><a href={`${base}tech/${entry.slug}`}>{entry.data.title}</a></h3>
+          <h3><a href={`${base}tech/${entry.slug}/`}>{entry.data.title}</a></h3>
           <TagList tags={entry.data.tags ?? []} />
         </article>
       ))}
