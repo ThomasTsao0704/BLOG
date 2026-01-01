@@ -91,15 +91,21 @@ tags: [Astro, Content]      # 選填
 
 ## URL 結構
 
-- 首頁：`/`
+**本地開發環境：**
+- 首頁：`http://localhost:4321/`
+- 列表頁：`/stocks`, `/psychology`, `/tech`
+- 內容頁：`/stocks/<slug>`, `/psychology/<slug>`, `/tech/<slug>`
+
+**GitHub Pages 正式環境：**
+- 首頁：`https://thomastsao0704.github.io/BLOG/`
 - 列表頁：
-  - `/stocks`
-  - `/psychology`
-  - `/tech`
+  - `https://thomastsao0704.github.io/BLOG/stocks`
+  - `https://thomastsao0704.github.io/BLOG/psychology`
+  - `https://thomastsao0704.github.io/BLOG/tech`
 - 內容頁：
-  - `/stocks/<slug>`
-  - `/psychology/<slug>`
-  - `/tech/<slug>`
+  - `https://thomastsao0704.github.io/BLOG/stocks/<slug>`
+  - `https://thomastsao0704.github.io/BLOG/psychology/<slug>`
+  - `https://thomastsao0704.github.io/BLOG/tech/<slug>`
 
 ## Slug 策略
 
@@ -150,7 +156,15 @@ git push -u origin main
 ### 4. 訪問網站
 
 部署完成後，網站將在以下網址可用：
-\`https://YOUR-USERNAME.github.io/BLOG/\`
+
+**正確網址：** `https://thomastsao0704.github.io/BLOG/`
+
+⚠️ **重要提醒：**
+- ✅ 正確：`https://thomastsao0704.github.io/BLOG/`
+- ✅ 正確：`https://thomastsao0704.github.io/BLOG/psychology/`
+- ❌ 錯誤：`https://thomastsao0704.github.io/psychology/` （缺少 /BLOG 前綴）
+
+所有頁面都必須包含 `/BLOG` 前綴才能正確訪問。
 
 ## 🛠️ 技術棧
 
