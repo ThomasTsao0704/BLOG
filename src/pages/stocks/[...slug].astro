@@ -14,6 +14,8 @@ export async function getStaticPaths() {
 const { stock } = Astro.props;
 const { Content } = await stock.render();
 
+const base = import.meta.env.BASE_URL;
+
 const ratingColors = {
   '買入': '#10b981',
   '持有': '#3b82f6',
@@ -120,7 +122,7 @@ const ratingColors = {
 
     <!-- 返回連結 -->
     <nav class="back-nav">
-      <a href="/stocks" class="back-link">← 返回股票列表</a>
+      <a href={`${base}stocks`} class="back-link">← 返回股票列表</a>
     </nav>
   </article>
 </BaseLayout>

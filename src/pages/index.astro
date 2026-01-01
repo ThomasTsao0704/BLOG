@@ -4,6 +4,8 @@ import SearchBox from "../components/SearchBox.astro";
 import TagList from "../components/TagList.astro";
 import { getCollection } from "astro:content";
 
+const base = import.meta.env.BASE_URL;
+
 const stocks = await getCollection("stocks");
 const psychology = await getCollection("psychology", ({ data }) => !data.draft);
 const tech = await getCollection("tech");
@@ -42,8 +44,8 @@ const topTags = [...tagCounts.entries()]
         分享股票分析、心理學思考與技術探索，建立屬於自己的知識體系。
       </p>
       <div class="hero-actions">
-        <a class="button" href="/stocks">股票分析</a>
-        <a class="button ghost" href="/psychology">心理文章</a>
+        <a class="button" href={`${base}stocks`}>股票分析</a>
+        <a class="button ghost" href={`${base}psychology`}>心理文章</a>
       </div>
       <div class="hero-stats">
         <div class="stat">
@@ -65,15 +67,15 @@ const topTags = [...tagCounts.entries()]
       <div>
         <p class="panel-title">導覽地圖</p>
         <div class="nav-cards">
-          <a class="nav-card" href="/stocks">
+          <a class="nav-card" href={`${base}stocks`}>
             <strong>📈 股票</strong>
             <span>個股分析、投資筆記與市場觀察。</span>
           </a>
-          <a class="nav-card" href="/psychology">
+          <a class="nav-card" href={`${base}psychology`}>
             <strong>🧠 心理</strong>
             <span>心理學文章、人性洞察與自我成長。</span>
           </a>
-          <a class="nav-card" href="/tech">
+          <a class="nav-card" href={`${base}tech`}>
             <strong>💻 技術</strong>
             <span>程式開發、技術探索與學習筆記。</span>
           </a>
@@ -92,7 +94,7 @@ const topTags = [...tagCounts.entries()]
       {latestStocks.map((stock) => (
         <article class="card">
           <p class="meta">{stock.data.category}</p>
-          <h3><a href={`/stocks/${stock.slug}`}>{stock.data.title}</a></h3>
+          <h3><a href={`${base}stocks/${stock.slug}`}>{stock.data.title}</a></h3>
           {stock.data.stockCode && <p class="stock-code-mini">{stock.data.stockCode}</p>}
           <TagList tags={stock.data.tags ?? []} />
         </article>
@@ -112,7 +114,7 @@ const topTags = [...tagCounts.entries()]
               day: "numeric",
             })}
           </p>
-          <h3><a href={`/psychology/${post.slug}`}>{post.data.title}</a></h3>
+          <h3><a href={`${base}psychology/${post.slug}`}>{post.data.title}</a></h3>
           <p>{post.data.description}</p>
           <TagList tags={post.data.tags ?? []} />
         </article>
@@ -126,7 +128,7 @@ const topTags = [...tagCounts.entries()]
       {latestTech.map((entry) => (
         <article class="card">
           <p class="meta">第 {String(entry.data.order).padStart(2, "0")} 篇</p>
-          <h3><a href={`/tech/${entry.slug}`}>{entry.data.title}</a></h3>
+          <h3><a href={`${base}tech/${entry.slug}`}>{entry.data.title}</a></h3>
           <TagList tags={entry.data.tags ?? []} />
         </article>
       ))}

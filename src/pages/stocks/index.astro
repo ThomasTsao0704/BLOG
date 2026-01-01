@@ -3,6 +3,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import TagList from "../../components/TagList.astro";
 import { getCollection } from "astro:content";
 
+const base = import.meta.env.BASE_URL;
+
 // 獲取並排序股票資料
 const stocks = await getCollection("stocks");
 const sortedStocks = stocks.sort((a, b) =>
@@ -40,7 +42,7 @@ const ratingColors = {
             <div class="stock-header">
               <div class="stock-title-section">
                 <h3>
-                  <a href={`/stocks/${stock.slug}`} aria-label={`查看${stock.data.title}分析`}>
+                  <a href={`${base}stocks/${stock.slug}`} aria-label={`查看${stock.data.title}分析`}>
                     {stock.data.title}
                   </a>
                 </h3>
