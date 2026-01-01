@@ -33,9 +33,32 @@ const { Content, headings } = await entry.render();
       <div class="content-body">
         <Content />
       </div>
+      <!-- 返回連結 -->
+      <nav class="back-nav">
+        <a href={`${import.meta.env.BASE_URL}tech/`} class="back-link">← 返回技術列表</a>
+      </nav>
     </article>
     <aside class="content-aside">
       <Toc headings={headings} />
     </aside>
   </div>
 </BaseLayout>
+
+<style>
+  .back-nav {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border, #e5e7eb);
+  }
+
+  .back-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: #2563eb;
+  }
+</style>

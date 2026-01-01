@@ -9,9 +9,9 @@ const {
 const base = import.meta.env.BASE_URL;
 
 const navLinks = [
-  { href: `${base}notes/`, label: "筆記" },
-  { href: `${base}posts/`, label: "文章" },
-  { href: `${base}series/`, label: "系列" },
+  { href: `${base}stocks/`, label: "股票" },
+  { href: `${base}psychology/`, label: "心理" },
+  { href: `${base}tech/`, label: "技術" },
 ];
 ---
 
@@ -33,9 +33,6 @@ const navLinks = [
             <a href={link.href}>{link.label}</a>
           ))}
         </nav>
-        <div class="nav-actions">
-          <a class="button ghost" href={`${base}notes/`}>新增筆記</a>
-        </div>
       </header>
       <main class="main">
         <slot />
