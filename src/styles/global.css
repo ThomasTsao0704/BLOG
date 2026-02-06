@@ -312,7 +312,7 @@ img {
   margin: 0;
 }
 
-.tag-list li span {
+.tag-list a {
   display: inline-flex;
   padding: 4px 10px;
   border-radius: 999px;
@@ -320,6 +320,13 @@ img {
   border: 1px solid var(--border);
   font-size: 0.8rem;
   color: var(--muted);
+  transition: all 0.2s ease;
+}
+
+.tag-list a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: #fffaf2;
 }
 
 .toc {
@@ -375,15 +382,30 @@ img {
   border-radius: 999px;
   border: 1px solid var(--border);
   padding: 8px 14px;
-  background: transparent;
-  color: var(--muted);
-  cursor: not-allowed;
+  background: var(--accent);
+  color: #f8f7f4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-box button:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 .search-hint {
   font-size: 0.8rem;
   color: var(--muted);
   margin: 0;
+}
+
+.pagefind-ui {
+  --pagefind-ui-primary: var(--accent);
+  --pagefind-ui-text: var(--ink);
+  --pagefind-ui-background: #fffdf9;
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: #f2e9dc;
+  --pagefind-ui-font: "Manrope", "Segoe UI", sans-serif;
 }
 
 .visually-hidden {

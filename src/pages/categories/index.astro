@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const base = import.meta.env.BASE_URL;
+
+const stocks = await getCollection("stocks");
+const psychology = await getCollection("psychology", ({ data }) => !data.draft);
+const tech = await getCollection("tech");
+const entries = [...stocks, ...psychology, ...tech];
+
+const categoryCounts = new Map();
+for (const entry of entries) {
+  const category = entry.data.category;
+  if (!category) continue;
+  categoryCounts.set(category, (categoryCounts.get(category) ?? 0) + 1);
+}
+
+const categories = [...categoryCounts.entries()]
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "zh-TW"))
+  .map(([category, count]) => ({ category, count }));
+---
+
+<BaseLayout title="分類" description="依照分類瀏覽內容。">
+  <section class="list-page">
+    <header class="list-hero">
+      <p class="eyebrow">分類</p>
+      <h1>分類瀏覽</h1>
+      <p class="lead">依照主題類別快速瀏覽內容。</p>
+    </header>
+
+    {categories.length === 0 ? (
+      <p class="empty-state">目前沒有分類可以瀏覽。</p>
+    ) : (
+      <div class="taxonomy-grid">
+        {categories.map(({ category, count }) => (
+          <div class="taxonomy-item">
+            <a href={`${base}categories/${encodeURIComponent(category)}/`}>
+              {category}
+            </a>
+            <span class="taxonomy-count">{count} 篇</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .taxonomy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .taxonomy-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .taxonomy-item a {
+    font-weight: 600;
+  }
+
+  .taxonomy-count {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .empty-state {
+    color: var(--muted);
+    padding: 2rem 0;
+  }
+</style>

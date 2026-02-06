@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const base = import.meta.env.BASE_URL;
+const title = "全站搜尋";
+const description = "搜尋股票分析、心理文章與技術筆記。";
+---
+
+<head>
+  <link rel="stylesheet" href={`${base}pagefind/pagefind-ui.css`} />
+</head>
+
+<BaseLayout title={title} description={description}>
+  <section class="list-page search-page">
+    <header class="list-hero">
+      <p class="eyebrow">搜尋</p>
+      <h1>全站搜尋</h1>
+      <p class="lead">搜尋股票分析、心理文章與技術筆記。</p>
+    </header>
+    <div id="search" class="pagefind-ui"></div>
+  </section>
+</BaseLayout>
+
+<script src={`${base}pagefind/pagefind-ui.js`}></script>
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    if (!window.PagefindUI) return;
+    const search = new PagefindUI({
+      element: "#search",
+      showSubResults: true,
+      showImages: false,
+      translations: {
+        placeholder: "輸入關鍵字搜尋",
+        no_results: "沒有找到符合的內容",
+        searching: "搜尋中...",
+        clear_search: "清除",
+        load_more: "載入更多",
+      },
+    });
+
+    const query = new URLSearchParams(window.location.search).get("q");
+    if (query) {
+      search.triggerSearch(query);
+    }
+  });
+</script>

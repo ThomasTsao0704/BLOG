@@ -1,0 +1,56 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "stocks"
+    label: "Stocks"
+    folder: "src/content/stocks"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Stock Code", name: "stockCode", widget: "string", required: false }
+      - { label: "Category", name: "category", widget: "string" }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Price", name: "price", widget: "number", required: false, value_type: "float" }
+      - { label: "Market Cap", name: "marketCap", widget: "number", required: false, value_type: "float" }
+      - { label: "PE", name: "pe", widget: "number", required: false, value_type: "float" }
+      - { label: "Dividend", name: "dividend", widget: "number", required: false, value_type: "float" }
+      - { label: "Sector", name: "sector", widget: "string", required: false }
+      - { label: "Rating", name: "rating", widget: "select", required: false, options: ["買入", "持有", "賣出", "觀察"] }
+      - { label: "Target Price", name: "targetPrice", widget: "number", required: false, value_type: "float" }
+      - { label: "Analysis Date", name: "analysisDate", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "psychology"
+    label: "Psychology"
+    folder: "src/content/psychology"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Date", name: "date", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Category", name: "category", widget: "string", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "tech"
+    label: "Tech"
+    folder: "src/content/tech"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Order", name: "order", widget: "number", value_type: "int" }
+      - { label: "Category", name: "category", widget: "string", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }

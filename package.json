@@ -6,9 +6,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "new:content": "node scripts/create-content.mjs"
   },
   "dependencies": {
-    "astro": "^5.16.6"
+    "astro": "^5.16.6",
+    "astro-pagefind": "^1.8.5"
   }
 }

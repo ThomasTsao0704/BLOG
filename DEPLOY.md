@@ -56,7 +56,7 @@ git commit -m "Initial commit: 個人知識整合平台"
 git branch -M main
 
 # 連結到 GitHub（替換 YOUR-USERNAME 和 BLOG）
-git remote add origin https://github.com/YOUR-USERNAME/BLOG.git
+git remote add origin https://github.com/thomastsao0704/BLOG.git
 
 # 推送到 GitHub
 git push -u origin main
@@ -138,6 +138,20 @@ git push
 2. 內容填入您的網域：`example.com`
 3. 在您的網域 DNS 設定中添加 CNAME 記錄指向 `YOUR-USERNAME.github.io`
 4. 詳細步驟參考：https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site
+
+## 🧩 網頁後台（Decap CMS）啟用
+
+此專案已加入 `/admin` 管理介面。要在網頁直接新增/編輯/刪除文章，請改用 Netlify 部署並啟用 Identity 與 Git Gateway。
+
+### Netlify 設定步驟
+1. 在 Netlify 建立新站台，連接 GitHub repo
+2. Build command：`npm run build`
+3. Publish directory：`dist`
+4. 部署完成後，到 **Site settings > Identity** 啟用 Identity
+5. 在 Identity 設定中啟用 **Git Gateway**
+6. 邀請管理者帳號或開啟註冊
+
+完成後進入：`https://<你的 Netlify 網域>/admin/`
 
 ## 📚 參考資源
 

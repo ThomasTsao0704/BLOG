@@ -1,0 +1,135 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TagList from "../../components/TagList.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const stocks = await getCollection("stocks");
+  const psychology = await getCollection("psychology", ({ data }) => !data.draft);
+  const tech = await getCollection("tech");
+  const entries = [...stocks, ...psychology, ...tech];
+
+  const categories = new Set();
+  for (const entry of entries) {
+    if (entry.data.category) {
+      categories.add(entry.data.category);
+    }
+  }
+
+  return [...categories].map((category) => ({
+    params: { category: encodeURIComponent(category) },
+    props: { category },
+  }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { category } = Astro.props;
+
+const stocks = await getCollection("stocks");
+const psychology = await getCollection("psychology", ({ data }) => !data.draft);
+const tech = await getCollection("tech");
+
+const filterByCategory = (entry) => entry.data.category === category;
+
+const categoryStocks = stocks
+  .filter(filterByCategory)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title, "zh-TW"));
+const categoryPsychology = psychology
+  .filter(filterByCategory)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const categoryTech = tech
+  .filter(filterByCategory)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const totalCount =
+  categoryStocks.length + categoryPsychology.length + categoryTech.length;
+---
+
+<BaseLayout title={`分類：${category}`} description={`查看 ${category} 相關內容。`}>
+  <section class="list-page">
+    <header class="list-hero">
+      <p class="eyebrow">分類</p>
+      <h1>{category}</h1>
+      <p class="lead">共 {totalCount} 篇內容</p>
+      <a class="back-link" href={`${base}categories/`}>← 返回分類列表</a>
+    </header>
+
+    {totalCount === 0 ? (
+      <p class="empty-state">目前沒有與此分類相關的內容。</p>
+    ) : (
+      <>
+        {categoryStocks.length > 0 && (
+          <section class="section">
+            <h2 class="section-title">股票分析</h2>
+            <div class="section-grid">
+              {categoryStocks.map((stock) => (
+                <article class="card">
+                  <p class="meta">{stock.data.category}</p>
+                  <h3><a href={`${base}stocks/${stock.slug}/`}>{stock.data.title}</a></h3>
+                  {stock.data.stockCode && <p class="stock-code-mini">{stock.data.stockCode}</p>}
+                  <TagList tags={stock.data.tags ?? []} />
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {categoryPsychology.length > 0 && (
+          <section class="section">
+            <h2 class="section-title">心理文章</h2>
+            <div class="section-grid">
+              {categoryPsychology.map((post) => (
+                <article class="card">
+                  <p class="meta">
+                    {post.data.date.toLocaleDateString("zh-TW", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
+                  <h3><a href={`${base}psychology/${post.slug}/`}>{post.data.title}</a></h3>
+                  <p>{post.data.description}</p>
+                  <TagList tags={post.data.tags ?? []} />
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {categoryTech.length > 0 && (
+          <section class="section">
+            <h2 class="section-title">技術文章</h2>
+            <div class="section-grid">
+              {categoryTech.map((entry) => (
+                <article class="card">
+                  <p class="meta">第 {String(entry.data.order).padStart(2, "0")} 篇</p>
+                  <h3><a href={`${base}tech/${entry.slug}/`}>{entry.data.title}</a></h3>
+                  <TagList tags={entry.data.tags ?? []} />
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+      </>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .empty-state {
+    color: var(--muted);
+    padding: 2rem 0;
+  }
+
+  .stock-code-mini {
+    font-family: "Monaco", "Courier New", monospace;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.5rem 0;
+  }
+</style>

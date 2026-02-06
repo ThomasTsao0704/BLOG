@@ -1,12 +1,14 @@
-﻿---
+---
 const { tags = [] } = Astro.props;
 const list = Array.isArray(tags) ? tags.filter(Boolean) : [];
+const base = import.meta.env.BASE_URL;
+const tagLink = (tag) => `${base}tags/${encodeURIComponent(tag)}/`;
 ---
 
 {list.length > 0 && (
   <ul class="tag-list" aria-label="標籤">
     {list.map((tag) => (
-      <li><span>#{tag}</span></li>
+      <li><a href={tagLink(tag)}>#{tag}</a></li>
     ))}
   </ul>
 )}

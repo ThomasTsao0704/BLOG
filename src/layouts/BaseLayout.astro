@@ -9,9 +9,12 @@ const {
 const base = import.meta.env.BASE_URL;
 
 const navLinks = [
+  { href: `${base}search/`, label: "搜尋" },
   { href: `${base}stocks/`, label: "股票" },
   { href: `${base}psychology/`, label: "心理" },
   { href: `${base}tech/`, label: "技術" },
+  { href: `${base}tags/`, label: "標籤" },
+  { href: `${base}categories/`, label: "分類" },
 ];
 ---
 
@@ -26,7 +29,7 @@ const navLinks = [
   </head>
   <body>
     <div class="page">
-      <header class="site-header">
+      <header class="site-header" data-pagefind-ignore>
         <a class="logo" href={base}>第二大腦</a>
         <nav class="nav-links" aria-label="主要導覽">
           {navLinks.map((link) => (
@@ -34,10 +37,10 @@ const navLinks = [
           ))}
         </nav>
       </header>
-      <main class="main">
+      <main class="main" data-pagefind-body>
         <slot />
       </main>
-      <footer class="site-footer">
+      <footer class="site-footer" data-pagefind-ignore>
         <p>為慢思考而生。Markdown 為先，安靜預設。</p>
       </footer>
     </div>

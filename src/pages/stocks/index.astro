@@ -11,6 +11,18 @@ const sortedStocks = stocks.sort((a, b) =>
   a.data.title.localeCompare(b.data.title, 'zh-TW')
 );
 
+const categoryCounts = new Map();
+for (const stock of sortedStocks) {
+  if (!stock.data.category) continue;
+  categoryCounts.set(
+    stock.data.category,
+    (categoryCounts.get(stock.data.category) ?? 0) + 1
+  );
+}
+const categories = [...categoryCounts.entries()]
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "zh-TW"))
+  .map(([category, count]) => ({ category, count }));
+
 const pageTitle = "股票分析";
 const pageDescription = "個股分析、投資筆記與市場觀察";
 
@@ -32,6 +44,20 @@ const ratingColors = {
         記錄個股分析、投資想法與市場觀察，建立屬於自己的投資知識庫。
       </p>
     </header>
+
+    {categories.length > 0 && (
+      <div class="category-strip" aria-label="分類瀏覽">
+        <span class="category-label">分類：</span>
+        {categories.map(({ category, count }) => (
+          <a
+            class="category-pill"
+            href={`${base}categories/${encodeURIComponent(category)}/`}
+          >
+            {category} ({count})
+          </a>
+        ))}
+      </div>
+    )}
 
     {sortedStocks.length === 0 ? (
       <p class="empty-state">目前還沒有股票分析，敬請期待！</p>
@@ -208,6 +234,38 @@ const ratingColors = {
     color: #9ca3af;
     margin-top: 1rem;
     margin-bottom: 0;
+  }
+
+  .category-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border, #e5e7eb);
+    background: var(--color-bg-secondary, #fff);
+    border-radius: 12px;
+  }
+
+  .category-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  .category-pill {
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    color: var(--color-text, #111827);
+    background: #f9fafb;
+    transition: all 0.2s ease;
+  }
+
+  .category-pill:hover {
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    background: #eff6ff;
   }
 
   .empty-state {

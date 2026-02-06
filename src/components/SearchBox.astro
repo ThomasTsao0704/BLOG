@@ -1,8 +1,9 @@
-﻿---
+---
 const { placeholder = "搜尋筆記、文章、系列" } = Astro.props;
+const base = import.meta.env.BASE_URL;
 ---
 
-<form class="search-box" role="search">
+<form class="search-box" role="search" method="get" action={`${base}search/`}>
   <label class="visually-hidden" for="site-search">搜尋</label>
   <input
     id="site-search"
@@ -11,6 +12,6 @@ const { placeholder = "搜尋筆記、文章、系列" } = Astro.props;
     placeholder={placeholder}
     autocomplete="off"
   />
-  <button type="button" aria-disabled="true">搜尋</button>
-  <p class="search-hint">準備好時可接上 Pagefind。</p>
+  <button type="submit">搜尋</button>
+  <p class="search-hint">輸入關鍵字後按 Enter。</p>
 </form>
