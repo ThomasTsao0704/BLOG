@@ -3,6 +3,7 @@ title: 為什麼正面思考不夠
 description: 關於耗竭、責任感與樂觀的界線
 date: 2025-01-01
 tags: [心理, 社會]
+status: draft
 ---
 
 同理 = 我理解你怎麼感受

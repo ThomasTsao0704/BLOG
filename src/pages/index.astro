@@ -3,12 +3,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SearchBox from "../components/SearchBox.astro";
 import TagList from "../components/TagList.astro";
 import { getCollection } from "astro:content";
+import { isVisible } from "../lib/content";
 
 const base = import.meta.env.BASE_URL;
 
-const stocks = await getCollection("stocks");
-const psychology = await getCollection("psychology", ({ data }) => !data.draft);
-const tech = await getCollection("tech");
+const stocks = await getCollection("stocks", isVisible);
+const psychology = await getCollection("psychology", isVisible);
+const tech = await getCollection("tech", isVisible);
 
 const latestStocks = stocks
   .sort((a, b) => a.data.title.localeCompare(b.data.title, 'zh-TW'))

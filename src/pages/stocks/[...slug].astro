@@ -2,9 +2,10 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TagList from "../../components/TagList.astro";
+import { isVisible } from "../../lib/content";
 
 export async function getStaticPaths() {
-  const stocks = await getCollection("stocks");
+  const stocks = await getCollection("stocks", isVisible);
   return stocks.map((stock) => ({
     params: { slug: stock.slug },
     props: { stock },
@@ -40,6 +41,7 @@ const ratingColors = {
 <BaseLayout
   title={displayCode ? `${stock.data.title} (${displayCode}) - ????` : `${stock.data.title} - ????`}
   description={`${stock.data.title}的投資分析、財務數據與個人觀點`}
+  noindex={stock.data.internal ?? false}
 >
   <article class="stock-detail">
     <!-- 股票標題區 -->

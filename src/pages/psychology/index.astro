@@ -2,10 +2,11 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TagList from "../../components/TagList.astro";
 import { getCollection } from "astro:content";
+import { isVisible } from "../../lib/content";
 
 const base = import.meta.env.BASE_URL;
 
-const posts = await getCollection("psychology", ({ data }) => !data.draft);
+const posts = await getCollection("psychology", isVisible);
 const sortedPosts = posts.sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );

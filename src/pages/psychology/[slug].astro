@@ -4,9 +4,10 @@ import TagList from "../../components/TagList.astro";
 import Toc from "../../components/Toc.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { isVisible } from "../../lib/content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("psychology", ({ data }) => !data.draft);
+  const posts = await getCollection("psychology", isVisible);
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -21,7 +22,11 @@ const { post } = Astro.props;
 const { Content, headings } = await post.render();
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  noindex={post.data.internal ?? false}
+>
   <div class="content-grid">
     <article class="content">
       <header class="content-header">

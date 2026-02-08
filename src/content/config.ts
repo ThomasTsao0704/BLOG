@@ -5,6 +5,9 @@ export const collections = {
   stocks: defineCollection({
     schema: z.object({
       title: z.string(), // 股票名稱
+      status: z.enum(['draft', 'published', 'archived']).default('published'),
+      publishDate: z.date().optional(),
+      internal: z.boolean().default(false),
       // 兼容既有欄位
       stockCode: z.string().optional(), // 股票代碼，例如：2330.TW
       category: z.string().optional(), // 分類：產業類別
@@ -61,6 +64,9 @@ export const collections = {
       title: z.string(),
       description: z.string(),
       date: z.date(),
+      status: z.enum(['draft', 'published', 'archived']).default('published'),
+      publishDate: z.date().optional(),
+      internal: z.boolean().default(false),
       category: z.string().optional(),
       tags: z.array(z.string()).optional(),
       draft: z.boolean().default(false),
@@ -71,6 +77,9 @@ export const collections = {
     schema: z.object({
       title: z.string(),
       order: z.number(),
+      status: z.enum(['draft', 'published', 'archived']).default('published'),
+      publishDate: z.date().optional(),
+      internal: z.boolean().default(false),
       category: z.string().optional(),
       tags: z.array(z.string()).optional(),
     }),

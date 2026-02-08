@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { isVisible } from "../../lib/content";
 
 const base = import.meta.env.BASE_URL;
 
-const stocks = await getCollection("stocks");
-const psychology = await getCollection("psychology", ({ data }) => !data.draft);
-const tech = await getCollection("tech");
+const stocks = await getCollection("stocks", isVisible);
+const psychology = await getCollection("psychology", isVisible);
+const tech = await getCollection("tech", isVisible);
 const entries = [...stocks, ...psychology, ...tech];
 
 const categoryCounts = new Map();
