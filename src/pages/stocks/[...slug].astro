@@ -16,16 +16,29 @@ const { Content } = await stock.render();
 
 const base = import.meta.env.BASE_URL;
 
+const resolveCode = (data) => {
+  if (data.stockCode) return data.stockCode;
+  if (data.ticker && data.exchange) return `${data.ticker} ${data.exchange}`;
+  return data.ticker ?? "";
+};
+const displayCode = resolveCode(stock.data);
+const peValue = stock.data.peRatio ?? stock.data.pe;
+const dividendValue = stock.data.dividendYield ?? stock.data.dividend;
+const priceValue = stock.data.price;
+
 const ratingColors = {
-  '買入': '#10b981',
-  '持有': '#3b82f6',
-  '賣出': '#ef4444',
-  '觀察': '#f59e0b'
+  '??': '#10b981',
+  '??': '#10b981',
+  '??': '#3b82f6',
+  '??': '#f59e0b',
+  '??': '#f59e0b',
+  '??': '#ef4444',
+  '??': '#ef4444'
 };
 ---
 
 <BaseLayout
-  title={`${stock.data.title} (${stock.data.stockCode || ''}) - 股票分析`}
+  title={displayCode ? `${stock.data.title} (${displayCode}) - ????` : `${stock.data.title} - ????`}
   description={`${stock.data.title}的投資分析、財務數據與個人觀點`}
 >
   <article class="stock-detail">
@@ -33,8 +46,8 @@ const ratingColors = {
     <header class="stock-header">
       <div class="title-section">
         <h1>{stock.data.title}</h1>
-        {stock.data.stockCode && (
-          <span class="stock-code-large">{stock.data.stockCode}</span>
+        {displayCode && (
+          <span class="stock-code-large">{displayCode}</span>
         )}
       </div>
 
@@ -50,33 +63,33 @@ const ratingColors = {
 
     <!-- 基本資訊卡片 -->
     <div class="info-cards">
-      {stock.data.price && (
+      {priceValue && (
         <div class="info-card">
           <div class="card-label">參考價格</div>
-          <div class="card-value">${stock.data.price}</div>
+          <div class="card-value">${priceValue}</div>
         </div>
       )}
       {stock.data.targetPrice && (
         <div class="info-card">
           <div class="card-label">目標價</div>
           <div class="card-value">${stock.data.targetPrice}</div>
-          {stock.data.price && (
+          {priceValue && (
             <div class="card-hint">
-              {((stock.data.targetPrice - stock.data.price) / stock.data.price * 100).toFixed(1)}% 潛在空間
+              {((stock.data.targetPrice - priceValue) / priceValue * 100).toFixed(1)}% 潛在空間
             </div>
           )}
         </div>
       )}
-      {stock.data.pe && (
+      {peValue && (
         <div class="info-card">
           <div class="card-label">本益比</div>
-          <div class="card-value">{stock.data.pe}</div>
+          <div class="card-value">{peValue}</div>
         </div>
       )}
-      {stock.data.dividend && (
+      {dividendValue && (
         <div class="info-card">
           <div class="card-label">股息殖利率</div>
-          <div class="card-value">{stock.data.dividend}%</div>
+          <div class="card-value">{dividendValue}%</div>
         </div>
       )}
       {stock.data.marketCap && (

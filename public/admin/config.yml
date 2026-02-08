@@ -14,17 +14,49 @@ collections:
     summary: "{{title}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Stock Code", name: "stockCode", widget: "string", required: false }
-      - { label: "Category", name: "category", widget: "string" }
-      - { label: "Tags", name: "tags", widget: "list", required: false }
-      - { label: "Price", name: "price", widget: "number", required: false, value_type: "float" }
-      - { label: "Market Cap", name: "marketCap", widget: "number", required: false, value_type: "float" }
-      - { label: "PE", name: "pe", widget: "number", required: false, value_type: "float" }
-      - { label: "Dividend", name: "dividend", widget: "number", required: false, value_type: "float" }
+      - { label: "Ticker", name: "ticker", widget: "string" }
+      - { label: "Exchange", name: "exchange", widget: "string" }
+      - { label: "ISIN", name: "isin", widget: "string", required: false }
       - { label: "Sector", name: "sector", widget: "string", required: false }
-      - { label: "Rating", name: "rating", widget: "select", required: false, options: ["買入", "持有", "賣出", "觀察"] }
-      - { label: "Target Price", name: "targetPrice", widget: "number", required: false, value_type: "float" }
-      - { label: "Analysis Date", name: "analysisDate", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "Industry", name: "industry", widget: "string", required: false }
+      - { label: "Category (legacy)", name: "category", widget: "string", required: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Rating", name: "rating", widget: "select", options: ["??", "??", "??", "??"] }
+      - { label: "Conviction", name: "conviction", widget: "select", required: false, options: ["?", "?", "?"] }
+      - { label: "Risk Level", name: "riskLevel", widget: "select", options: ["?", "?", "?"] }
+      - { label: "Target Price", name: "targetPrice", widget: "number", value_type: "float" }
+      - { label: "Valuation Method", name: "valuationMethod", widget: "string", required: false }
+      - { label: "Time Horizon", name: "timeHorizon", widget: "select", required: false, options: ["??", "??", "??"] }
+      - { label: "Analysis Date", name: "analysisDate", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Last Update", name: "lastUpdate", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "Market Cap", name: "marketCap", widget: "number", required: false, value_type: "float" }
+      - { label: "PE Ratio", name: "peRatio", widget: "number", required: false, value_type: "float" }
+      - { label: "PB Ratio", name: "pbRatio", widget: "number", required: false, value_type: "float" }
+      - { label: "Dividend Yield", name: "dividendYield", widget: "number", required: false, value_type: "float" }
+      - { label: "Price (legacy)", name: "price", widget: "number", required: false, value_type: "float" }
+      - { label: "PE (legacy)", name: "pe", widget: "number", required: false, value_type: "float" }
+      - { label: "Dividend (legacy)", name: "dividend", widget: "number", required: false, value_type: "float" }
+      - { label: "Stock Code (legacy)", name: "stockCode", widget: "string", required: false }
+      - { label: "Revenue Growth YoY", name: "revenueGrowthYoY", widget: "number", required: false, value_type: "float" }
+      - { label: "EPS Growth YoY", name: "epsGrowthYoY", widget: "number", required: false, value_type: "float" }
+      - { label: "Gross Margin", name: "grossMargin", widget: "number", required: false, value_type: "float" }
+      - { label: "Operating Margin", name: "operatingMargin", widget: "number", required: false, value_type: "float" }
+      - { label: "ROE", name: "roe", widget: "number", required: false, value_type: "float" }
+      - { label: "Free Cash Flow", name: "freeCashFlow", widget: "number", required: false, value_type: "float" }
+      - { label: "Moat", name: "moat", widget: "list", required: false }
+      - { label: "Bull Case", name: "bullCase", widget: "text", required: false }
+      - { label: "Bear Case", name: "bearCase", widget: "text", required: false }
+      - { label: "Thesis", name: "thesis", widget: "text", required: false }
+      - { label: "Competitors", name: "competitors", widget: "list", required: false }
+      - label: "Decision Log"
+        name: "decisionLog"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Date", name: "date", widget: "date", format: "YYYY-MM-DD", required: false }
+          - { label: "Action", name: "action", widget: "select", options: ["??", "??", "??", "??", "??", "??"], required: false }
+          - { label: "Price", name: "price", widget: "number", required: false, value_type: "float" }
+          - { label: "Reason", name: "reason", widget: "text", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "psychology"

@@ -5,6 +5,13 @@ import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL;
 
+const resolveCategory = (data) => data.category ?? data.sector ?? data.industry ?? null;
+const resolveCode = (data) => {
+  if (data.stockCode) return data.stockCode;
+  if (data.ticker && data.exchange) return `${data.ticker} ${data.exchange}`;
+  return data.ticker ?? "";
+};
+
 // 獲取並排序股票資料
 const stocks = await getCollection("stocks");
 const sortedStocks = stocks.sort((a, b) =>
@@ -13,10 +20,11 @@ const sortedStocks = stocks.sort((a, b) =>
 
 const categoryCounts = new Map();
 for (const stock of sortedStocks) {
-  if (!stock.data.category) continue;
+  const category = resolveCategory(stock.data);
+  if (!category) continue;
   categoryCounts.set(
-    stock.data.category,
-    (categoryCounts.get(stock.data.category) ?? 0) + 1
+    category,
+    (categoryCounts.get(category) ?? 0) + 1
   );
 }
 const categories = [...categoryCounts.entries()]
@@ -28,10 +36,13 @@ const pageDescription = "個股分析、投資筆記與市場觀察";
 
 // 評級顏色對應
 const ratingColors = {
+  '買進': '#10b981',
   '買入': '#10b981',
   '持有': '#3b82f6',
-  '賣出': '#ef4444',
-  '觀察': '#f59e0b'
+  '觀望': '#f59e0b',
+  '觀察': '#f59e0b',
+  '減碼': '#ef4444',
+  '賣出': '#ef4444'
 };
 ---
 
@@ -63,70 +74,64 @@ const ratingColors = {
       <p class="empty-state">目前還沒有股票分析，敬請期待！</p>
     ) : (
       <div class="stock-grid" role="list">
-        {sortedStocks.map((stock) => (
-          <article class="stock-card" role="listitem">
-            <div class="stock-header">
-              <div class="stock-title-section">
-                <h3>
-                  <a href={`${base}stocks/${stock.slug}/`} aria-label={`查看${stock.data.title}分析`}>
-                    {stock.data.title}
-                  </a>
-                </h3>
-                {stock.data.stockCode && (
-                  <span class="stock-code">{stock.data.stockCode}</span>
+        {sortedStocks.map((stock) => {
+          const code = resolveCode(stock.data);
+          const peValue = stock.data.peRatio ?? stock.data.pe;
+          const dividendValue = stock.data.dividendYield ?? stock.data.dividend;
+
+          return (
+            <article class="stock-card" role="listitem">
+              <div class="stock-header">
+                <div class="stock-title-section">
+                  <h3>
+                    <a href={`${base}stocks/${stock.slug}/`} aria-label={`??${stock.data.title}??`}>
+                      {stock.data.title}
+                    </a>
+                  </h3>
+                  {code && (
+                    <span class="stock-code">{code}</span>
+                  )}
+                </div>
+                {stock.data.rating && (
+                  <span
+                    class="rating-badge"
+                    style={`background-color: ${ratingColors[stock.data.rating]}`}
+                    aria-label={`???${stock.data.rating}`}
+                  >
+                    {stock.data.rating}
+                  </span>
                 )}
               </div>
-              {stock.data.rating && (
-                <span
-                  class="rating-badge"
-                  style={`background-color: ${ratingColors[stock.data.rating]}`}
-                  aria-label={`評級：${stock.data.rating}`}
-                >
-                  {stock.data.rating}
-                </span>
-              )}
-            </div>
 
-            <div class="stock-info">
-              {stock.data.price && (
-                <div class="info-item">
-                  <span class="label">股價</span>
-                  <span class="value">${stock.data.price}</span>
-                </div>
-              )}
-              {stock.data.pe && (
-                <div class="info-item">
-                  <span class="label">本益比</span>
-                  <span class="value">{stock.data.pe}</span>
-                </div>
-              )}
-              {stock.data.dividend && (
-                <div class="info-item">
-                  <span class="label">股息</span>
-                  <span class="value">{stock.data.dividend}%</span>
-                </div>
-              )}
-              {stock.data.targetPrice && (
-                <div class="info-item">
-                  <span class="label">目標價</span>
-                  <span class="value">${stock.data.targetPrice}</span>
-                </div>
-              )}
-            </div>
+              <div class="stock-metrics">
+                {peValue && (
+                  <div class="metric">
+                    <span class="label">PE</span>
+                    <span class="value">{peValue}</span>
+                  </div>
+                )}
+                {dividendValue && (
+                  <div class="metric">
+                    <span class="label">??</span>
+                    <span class="value">{dividendValue}%</span>
+                  </div>
+                )}
+                {stock.data.targetPrice && (
+                  <div class="metric">
+                    <span class="label">???</span>
+                    <span class="value">${stock.data.targetPrice}</span>
+                  </div>
+                )}
+              </div>
 
-            {stock.data.category && (
-              <p class="meta" aria-label="產業">{stock.data.category}</p>
-            )}
-
-            <TagList tags={stock.data.tags ?? []} />
-
-            {stock.data.analysisDate && (
-              <p class="analysis-date">
-                分析日期：{stock.data.analysisDate.toLocaleDateString('zh-TW')}
-              </p>
-            )}
-          </article>
-        ))}
+              {stock.data.analysisDate && (
+                <p class="analysis-date">
+                  ?????{stock.data.analysisDate.toLocaleDateString('zh-TW')}
+                </p>
+              )}
+            </article>
+          );
+        })}
       </div>
     )}
   </section>

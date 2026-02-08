@@ -11,7 +11,7 @@ const entries = [...stocks, ...psychology, ...tech];
 
 const categoryCounts = new Map();
 for (const entry of entries) {
-  const category = entry.data.category;
+  const category = entry.data.category ?? entry.data.sector ?? entry.data.industry;
   if (!category) continue;
   categoryCounts.set(category, (categoryCounts.get(category) ?? 0) + 1);
 }
