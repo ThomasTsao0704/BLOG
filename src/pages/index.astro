@@ -6,13 +6,6 @@ import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL;
 
-const resolveCategory = (data) => data.category ?? data.sector ?? data.industry ?? "";
-const resolveCode = (data) => {
-  if (data.stockCode) return data.stockCode;
-  if (data.ticker && data.exchange) return `${data.ticker} ${data.exchange}`;
-  return data.ticker ?? "";
-};
-
 const stocks = await getCollection("stocks");
 const psychology = await getCollection("psychology", ({ data }) => !data.draft);
 const tech = await getCollection("tech");
@@ -98,19 +91,14 @@ const topTags = [...tagCounts.entries()]
   <section class="section">
     <h2 class="section-title">📈 最新股票分析</h2>
     <div class="section-grid">
-      {latestStocks.map((stock) => {
-        const category = resolveCategory(stock.data);
-        const code = resolveCode(stock.data);
-
-        return (
-          <article class="card">
-            {category && <p class="meta">{category}</p>}
-            <h3><a href={`${base}stocks/${stock.slug}/`}>{stock.data.title}</a></h3>
-            {code && <p class="stock-code-mini">{code}</p>}
-            <TagList tags={stock.data.tags ?? []} />
-          </article>
-        );
-      })}
+      {latestStocks.map((stock) => (
+        <article class="card">
+          <p class="meta">{stock.data.category}</p>
+          <h3><a href={`${base}stocks/${stock.slug}/`}>{stock.data.title}</a></h3>
+          {stock.data.stockCode && <p class="stock-code-mini">{stock.data.stockCode}</p>}
+          <TagList tags={stock.data.tags ?? []} />
+        </article>
+      ))}
     </div>
   </section>
 
